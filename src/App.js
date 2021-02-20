@@ -1,23 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
-
+import axios from 'axios';
+import {useState, useEffect, useRef} from 'react'
 function App() {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [item, setItem] = useState(1);
+  const itemRef= useRef(null);
+
+  const loadPicture= ()=>{
+    setLoading(true);
+      axios.get(
+      `https://jsonplaceholder.typicode.com/photos?_page=${item}&_limit=1`
+    )
+    .then(
+      response=>{
+        const newArr = data.concat(response.data);
+        setData(newArr);
+        setItem(item=>item+1);
+        setLoading(false);
+
+      }
+    )
+  }
+
+  useEffect(()=>{
+    loadPicture();
+  },[])
+
+const onIntersect = ([entry],observer)=>{
+  if(entry.isIntersecting&&!loading){
+    observer.unobserve(entry.target);
+    loadPicture();
+    observer.observe(itemRef.current);
+  }
+};
+
+  useEffect(()=>{
+    if(!loading){
+      const observer = new IntersectionObserver(onIntersect, {threshold:1});
+      if(itemRef.current)
+      observer.observe(itemRef.current);
+      return()=> observer&&observer.disconnect();
+    }
+  },[loading])
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  
+      {data.map((item)=>{
+    return <div key={item.id}>{item.id}<img src={item.url} width="500px"/></div>
+  })}
+      <div ref={itemRef}>{loading&&'Loading'}</div>
     </div>
   );
 }
