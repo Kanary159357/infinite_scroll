@@ -22,9 +22,6 @@ function App() {
     )
   }
 
-  useEffect(()=>{
-    loadPicture();
-  },[])
 
 const onIntersect = ([entry],observer)=>{
   if(entry.isIntersecting&&!loading){
@@ -47,7 +44,7 @@ const onIntersect = ([entry],observer)=>{
     <div className="App">
   
       {data.map((item)=>{
-    return <div key={item.id}>{item.id}<img src={item.url} width="500px"/></div>
+    return <div key={item.id}><img src={item.url} width="500px"/></div>
   })}
       <div ref={itemRef}>{loading&&'Loading'}</div>
     </div>
