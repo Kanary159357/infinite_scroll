@@ -1,5 +1,6 @@
 <h1>Infinite Scroll</h1>
-Implemented on React 
+<br/>
 
-Intersection Observer
+<h3/>Implemented with React, Intersection Observer, React hook<h3/> 
+
 
