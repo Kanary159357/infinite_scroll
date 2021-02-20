@@ -36,7 +36,7 @@ const onIntersect = ([entry],observer)=>{
 
   useEffect(()=>{
     if(!loading){
-      const observer = new IntersectionObserver(onIntersect, {threshold:1});
+      const observer = new IntersectionObserver(onIntersect, {threshold:1, rootMargin:'0px 0px 50% 0px'});
       if(itemRef.current)
       observer.observe(itemRef.current);
       return()=> observer&&observer.disconnect();
